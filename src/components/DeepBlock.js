@@ -1,19 +1,25 @@
 import React from 'react';
-import ShallowBlock from './ShallowBlock';
 import { Link, useParams } from 'react-router-dom';
-import useBlock from './useBlock';
-import useBlocks from './useBlocks';
+import useBlock from '../hooks/useBlock';
+import useBlocks from '../hooks/useBlocks';
+import ShallowBlock from './ShallowBlock';
+import Sortable from './Sortable';
 import BlockContainer from './BlockContainer';
 import ContentEditor from './ContentEditor';
 import './DeepBlock.scss';
 
+/**
+ * render a block and it's children
+ */
 const DeepBlock = () => {
   const { id } = useParams();
   const [block] = useBlock(id);
-  const blocks = useBlocks(id);
+  const [blocks, setBlocks] = useBlocks(id);
 
   return (
     <div className="DeepBlock" key={id}>
+      {JSON.stringify(block, null, 2)}
+      {JSON.stringify(blocks, null, 2)}
       { block && !block.parent &&
         <div className="DeepBlock__breadcrumb">
           <Link to={`/`}>ROOT</Link>
@@ -29,15 +35,18 @@ const DeepBlock = () => {
           <ContentEditor id={id} />
         </div>
       }
-      { blocks.length > 0 &&
-        <div className="DeepBlock__children">
+      {/* { blocks.length > 0 &&
+
           {blocks.map((props) => (
             <BlockContainer>
               <ShallowBlock {...props} key={props.id} />
             </BlockContainer>
           ))}
         </div>
-      }
+      } */}
+      <div className="DeepBlock__children">
+        <Sortable items={blocks} setItems={setBlocks} component={ShallowBlock} />
+      </div>
     </div>
   );
 };

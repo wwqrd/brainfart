@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Editor, EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js';
-import useBlock from './useBlock';
+import useBlock from '../hooks/useBlock';
 
 const ContentEditor = ({ id }) => {
   const [block, setBlock] = useBlock(id);

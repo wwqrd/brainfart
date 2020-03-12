@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import Blocks from './Blocks';
+import { Context } from '../store/Blocks';
 
 const useBlock = (id) => {
-  const [blocks, setBlocks] = useContext(Blocks);
+  const [blocks, setBlocks] = useContext(Context);
 
   if (!id) { return [null, () => {}]; }
 

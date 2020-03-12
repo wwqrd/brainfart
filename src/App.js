@@ -5,14 +5,14 @@ import {
   Route,
 } from 'react-router-dom';
 import DeepBlock from './components/DeepBlock';
-import { BlocksProvider } from './components/Blocks';
+import Blocks from './store/Blocks';
 import './App.css';
 
 const App = ({ blocks }) => {
   return (
     <Router>
       <div className="App">
-        <BlocksProvider>
+        <Blocks>
           <Switch>
             <Route path="/block/:id" strict>
               <DeepBlock />
@@ -21,7 +21,7 @@ const App = ({ blocks }) => {
               <DeepBlock />
             </Route>
           </Switch>
-        </BlocksProvider>
+        </Blocks>
       </div>
     </Router>
   );

@@ -3,15 +3,15 @@ import defaultBlocks from './defaultBlocks.json';
 
 const defaultValue = [[], () => {}];
 
-const Blocks = React.createContext(defaultValue);
+export const Context = React.createContext(defaultValue);
 
-export const BlocksProvider = ({ children }) => {
+export const Blocks = ({ children }) => {
   const [state, setState] = useState(defaultBlocks);
 
   return (
-    <Blocks.Provider value={[ state, setState ]}>
+    <Context.Provider value={[ state, setState ]}>
       {children}
-    </Blocks.Provider>
+    </Context.Provider>
   );
 };
 
