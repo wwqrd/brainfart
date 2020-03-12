@@ -1,5 +1,63 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+# Data model
+
+Blocks
+
+- value
+- name
+- type
+- parent
+
+page:
+ parent: null
+ value: hi i'm a page
+ type: default
+
+ text:
+  parent: page
+  type: text
+  value: some text
+
+ a property:
+  parent: page
+  type: property
+  value: name of property
+
+  property value:
+    parent: a property
+    value: 'foo'
+
+list:
+  parent: null
+  type: list
+  value: my awesome list
+
+  an item:
+    a property:
+      parent: page
+      type: property
+      value: name of property
+
+    property value:
+      parent: a property
+      value: 'foo'
+
+list:
+  parent: null
+  type: list
+  value: my awesome list
+
+  a property:
+    parent: page
+    type: property
+    value: name of property
+
+  an item:
+    parent: list
+    properties: []
+
 ## Available Scripts
 
 In the project directory, you can run:

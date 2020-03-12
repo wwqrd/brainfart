@@ -1,0 +1,36 @@
+[
+  {
+    "id": "1",
+    "type": "text",
+    "name": "foo",
+    "value": "bar"
+  },
+  {
+    "id": "2",
+    "type": "markdown",
+    "value": "## hello world\nfoo bar"
+  },
+  {
+    "id": "3",
+    "type": "text",
+    "value": "click me"
+  },
+  {
+    "parent": "3",
+    "id": "4",
+    "type": "markdown",
+    "value": "## hello world\nfoo bar"
+  },
+  {
+    "parent": "3",
+    "id": "5",
+    "type": "text",
+    "value": "more stuff"
+  },
+  {
+    "parent": "4",
+    "id": "6",
+    "type": "text",
+    "value": "even more stuff"
+  }
+]
