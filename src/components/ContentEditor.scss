@@ -1,4 +1,6 @@
 .ContentEditor {
+  background: pink;
+  border: 2px solid black;
   &__editor {
     .CodeMirror {
       border: 1px solid #eee;

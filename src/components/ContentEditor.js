@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { Editor, EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js';
 import useBlock from './useBlock';
-import CodeMirror from 'react-codemirror';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/markdown/markdown';
-import './ContentEditor.scss';
 
 const ContentEditor = ({ id }) => {
-  const block = useBlock(id);
-  const [value, setValue] = useState(block.value);
+  const [block, setBlock] = useBlock(id);
+  const rawData = markdownToDraft(block.value);
+  const editorContent = convertFromRaw(rawData);
+  const [editorState, setEditorState] = useState(EditorState.createWithContent(editorContent));
+
+  const draftEditorContent = editorState.getCurrentContent();
+
+  const saveEditorState = useCallback(() => {
+    setBlock({
+      value: draftToMarkdown(convertToRaw(editorState.getCurrentContent()))
+    });
+  }, [setBlock, draftEditorContent]);
 
   return (
-    <div>
-      <CodeMirror
-        options={{
-          mode: 'markdown',
-          viewportMargin: Infinity,
-        }}
-        value={value}
-        onChange={setValue}
-        className="ContentEditor__editor"
+    <div className="ContentEditor">
+      <Editor
+        editorState={editorState}
+        onChange={setEditorState}
+        onBlur={saveEditorState}
       />
     </div>
   );

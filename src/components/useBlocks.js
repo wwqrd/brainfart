@@ -1,7 +1,14 @@
-import defaultBlocks from './defaultBlocks.json';
+import { useContext } from 'react';
+import Blocks from './Blocks';
 
 const useBlocks = (id) => {
-  return defaultBlocks.filter(block => block.parent === id);
+  const [blocks] = useContext(Blocks);
+
+  if (!id) {
+    return blocks.filter(block => !block.parent);
+  }
+
+  return blocks.filter(block => block.parent === id);
 };
 
 export default useBlocks;

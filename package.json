@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "codemirror": "^5.52.0",
     "draft-js": "^0.11.4",
+    "markdown-draft-js": "^2.2.0",
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
     "react-codemirror": "^1.0.0",
