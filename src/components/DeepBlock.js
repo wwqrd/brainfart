@@ -5,6 +5,7 @@ import useBlock from './useBlock';
 import useBlocks from './useBlocks';
 import BlockContainer from './BlockContainer';
 import ContentEditor from './ContentEditor';
+import './DeepBlock.scss';
 
 const DeepBlock = () => {
   const { id } = useParams();
@@ -12,23 +13,31 @@ const DeepBlock = () => {
   const blocks = useBlocks(id);
 
   return (
-    <div key={id}>
+    <div className="DeepBlock" key={id}>
       { block && !block.parent &&
-        <Link to={`/`}>ROOT</Link>
+        <div className="DeepBlock__breadcrumb">
+          <Link to={`/`}>ROOT</Link>
+        </div>
       }
       { block && block.parent &&
-        <Link to={`/block/${block.parent}`}>{block.value}</Link>
+        <div className="DeepBlock__breadcrumb">
+          <Link to={`/block/${block.parent}`}>{block.value}</Link>
+        </div>
       }
       { id &&
-        <BlockContainer>
+        <div className="DeepBlock__container">
           <ContentEditor id={id} />
-        </BlockContainer>
+        </div>
       }
-      {blocks.map((props) => (
-        <BlockContainer>
-          <ShallowBlock {...props} key={props.id} />
-        </BlockContainer>
-      ))}
+      { blocks.length > 0 &&
+        <div className="DeepBlock__children">
+          {blocks.map((props) => (
+            <BlockContainer>
+              <ShallowBlock {...props} key={props.id} />
+            </BlockContainer>
+          ))}
+        </div>
+      }
     </div>
   );
 };
