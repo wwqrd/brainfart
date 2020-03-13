@@ -1,8 +1,9 @@
 import React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import move from 'array-move';
 import { clamp, distance } from "@popmotion/popcorn";
+import './Sortable.scss';
 
 // export interface Position {
 //   top;
@@ -58,10 +59,14 @@ const Item = ({ item, setPosition, moveItem, i, component: Component }) => {
   // decide when a dragging element should switch places with its siblings.
   const ref = useRef(null);
 
+  // const dragControls = useDragControls();
+
   // By manually creating a reference to `dragOriginY` we can manipulate this value
   // if the user is dragging this DOM element while the drag gesture is active to
   // compensate for any movement as the items are re-positioned.
   const dragOriginY = useMotionValue(0);
+  const dragPositionY = useMotionValue(0);
+  const softDragPositionY = useSpring(dragPositionY, {});
 
   // Update the measured position of the item so we can calculate when we should rearrange.
   useEffect(() => {
@@ -72,36 +77,57 @@ const Item = ({ item, setPosition, moveItem, i, component: Component }) => {
   });
 
   return (
-    <motion.div
-      ref={ref}
-      initial={false}
-      // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
-      animate={isDragging ? onTop : flat}
-      // style={{ background: color, height: heights[color] }}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 1.12 }}
-      drag="y"
-      dragOriginY={dragOriginY}
-      dragConstraints={{ top: 0, bottom: 0 }}
-      dragElastic={1}
-      onDragStart={() => setDragging(true)}
-      onDragEnd={() => setDragging(false)}
-      onDrag={(e, { point }) => moveItem(i, point.y)}
-      positionTransition={({ delta }) => {
-        if (isDragging) {
-          // If we're dragging, we want to "undo" the items movement within the list
-          // by manipulating its dragOriginY. This will keep the item under the cursor,
-          // even though it's jumping around the DOM.
-          dragOriginY.set(dragOriginY.get() + delta.y);
-        }
+    <motion.div className="Sortable">
+      <motion.div
+        className="Sortable__handle"
+        ref={ref}
+        initial={false}
+        // If we're dragging, we want to set the zIndex of that item to be on top of the other items.
+        animate={isDragging ? onTop : flat}
+        // style={{ background: color, height: heights[color] }}
+        // whileHover={{ scale: 1.03, background: 'purple' }}
+        // whileTap={{ scale: 1.12 }}
+        drag="y"
+        dragOriginY={dragOriginY}
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={1}
+        onDragStart={() => setDragging(true)}
+        onDragEnd={() => {
+          setDragging(false);
+          dragPositionY.set(0);
+        }}
+        onDrag={(e, { point, offset }) => {
+          moveItem(i, point.y);
+          // console.log(point.y, offset.y);
+          dragPositionY.set(point.y);
+        }}
+        // dragTransition={{ bounceStiffness: 1000, bounceDamping: 1000 }}
+        positionTransition={({ delta }) => {
+          if (isDragging) {
+            // If we're dragging, we want to "undo" the items movement within the list
+            // by manipulating its dragOriginY. This will keep the item under the cursor,
+            // even though it's jumping around the DOM.
+            dragOriginY.set(dragOriginY.get() + delta.y);
+          }
 
-        // If `positionTransition` is a function and returns `false`, it's telling
-        // Motion not to animate from its old position into its new one. If we're
-        // dragging, we don't want any animation to occur.
-        return !isDragging;
-      }}
-    >
-      <Component {...item} />
+          // If `positionTransition` is a function and returns `false`, it's telling
+          // Motion not to animate from its old position into its new one. If we're
+          // dragging, we don't want any animation to occur.
+          return !isDragging;
+        }}
+        // dragPropagation={true}
+        style={{ cursor: 'pointer', background: isDragging ? 'purple' : 'transparent' }}
+      >
+        ::
+      </motion.div>
+      <motion.div
+        className="Sortable__content"
+        animate={isDragging ? onTop : flat}
+        positionTransition={!isDragging}
+        style={{ y: isDragging ? dragPositionY : softDragPositionY, background: isDragging ? 'purple' : 'transparent' }}
+      >
+        <Component {...item} />
+      </motion.div>
     </motion.div>
   );
 };

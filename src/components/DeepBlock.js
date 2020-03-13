@@ -18,8 +18,6 @@ const DeepBlock = () => {
 
   return (
     <div className="DeepBlock" key={id}>
-      {JSON.stringify(block, null, 2)}
-      {JSON.stringify(blocks, null, 2)}
       { block && !block.parent &&
         <div className="DeepBlock__breadcrumb">
           <Link to={`/`}>ROOT</Link>
