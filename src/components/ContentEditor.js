@@ -3,7 +3,7 @@ import { Editor, EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import { draftToMarkdown, markdownToDraft } from 'markdown-draft-js';
 import useBlock from '../hooks/useBlock';
 
-const ContentEditor = ({ id }) => {
+const ContentEditor = React.forwardRef(({ id }, ref) => {
   const [block, setBlock] = useBlock(id);
   const rawData = markdownToDraft(block.value);
   const editorContent = convertFromRaw(rawData);
@@ -20,12 +20,13 @@ const ContentEditor = ({ id }) => {
   return (
     <div className="ContentEditor">
       <Editor
+        ref={ref}
         editorState={editorState}
         onChange={setEditorState}
         onBlur={saveEditorState}
       />
     </div>
   );
-}
+});
 
 export default ContentEditor;

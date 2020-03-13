@@ -3,12 +3,16 @@ import { Context } from '../store/Blocks';
 
 const useBlocks = (id) => {
   const [blocks, setBlocks] = useContext(Context);
+  let related;
+  let unrelated;
 
   if (!id) {
-    return [blocks.filter(block => !block.parent), setBlocks];
+    related = blocks.filter(block => !block.parent);
+  } else {
+    related = blocks.filter(block => block.parent === id);
   }
 
-  return [blocks.filter(block => block.parent === id), setBlocks];
+  return [related, setBlocks];
 };
 
 export default useBlocks;
